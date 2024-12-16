@@ -1,3 +1,5 @@
+## Maybe we can keep this going
+
 <h1 align="center">dbt-expectations</h1>
 <p align="center">
 <img alt="logo" width="10%" src="https://raw.githubusercontent.com/calogica/dbt-expectations/main/static/dbt-expectations-logo.svg" />
