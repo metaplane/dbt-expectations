@@ -1,3 +1,5 @@
+## Note: This package is no longer actively supported. 
+<hr/>
 <h1 align="center">dbt-expectations</h1>
 <p align="center">
 <img alt="logo" width="10%" src="https://raw.githubusercontent.com/calogica/dbt-expectations/main/static/dbt-expectations-logo.svg" />
@@ -16,29 +18,6 @@
 ## About
 
 `dbt-expectations` is an extension package for [**dbt**](https://github.com/dbt-labs/dbt), inspired by the [Great Expectations package for Python](https://greatexpectations.io/). The intent is to allow dbt users to deploy GE-like tests in their data warehouse directly from dbt, vs having to add another integration with their data warehouse.
-
-## Featured Sponsors ❤️
-
-Development of `dbt-expectations` (and `dbt-date`) is funded by our amazing [sponsors](https://github.com/sponsors/calogica), including our **featured** sponsors:
-
-<table width="80%">
-<tr>
-
-<td width="40%" valign="top" align="center">
-<p><a href="https://datacoves.com/product" target="_blank">datacoves.com</a></p>
-<p>
-<a href="https://datacoves.com/product" target="_blank">
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="https://github.com/datacoves/dbt-coves/blob/main/images/datacoves-dark.png">
-  <img alt="Datacoves" src="https://github.com/datacoves/dbt-coves/blob/main/images/datacoves-light.png" width="150">
-</picture>
-</a>
-</p>
-</td>
-
-</tr>
-
-</table>
 
 ## Install
 
