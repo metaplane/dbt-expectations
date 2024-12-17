@@ -29,9 +29,8 @@ Include in `packages.yml`
 
 ```yaml
 packages:
-    - package: calogica/dbt_expectations
-      version: [">=0.10.0", "<0.11.0"]
-        # <see https://github.com/calogica/dbt-expectations/releases/latest> for the latest version tag
+  - git: https://github.com/metaplane/dbt-expectations.git
+    revision: bdb8f8e668da2743036a81fa95565d5787a56532
 ```
 
 This package supports:
