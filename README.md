@@ -1,60 +1,36 @@
-## Maybe we can keep this going
-
+<hr/>
 <h1 align="center">dbt-expectations</h1>
 <p align="center">
-<img alt="logo" width="10%" src="https://raw.githubusercontent.com/calogica/dbt-expectations/main/static/dbt-expectations-logo.svg" />
+<img alt="logo" width="10%" src="https://raw.githubusercontent.com/metaplane/dbt-expectations/main/static/dbt-expectations-logo.svg" />
 </p>
 
 <hr/>
 
 <p align="center">
-<a href="https://circleci.com/gh/calogica/dbt-expectations/tree/main">
-<img alt="CircleCI" src="https://img.shields.io/circleci/build/github/calogica/dbt-expectations/main?style=plastic"/>
+<a href="https://circleci.com/gh/metaplane/dbt-expectations/tree/main">
+<img alt="CircleCI" src="https://img.shields.io/circleci/build/github/metaplane/dbt-expectations/main?style=plastic"/>
 </a>
 <img alt="License" src="https://img.shields.io/badge/license-Apache--2.0-ff69b4?style=plastic"/>
 
 </p>
 
 ## About
+This is a maintained fork of the original [calogica dbt-expectations](https://github.com/calogica/dbt-expectations) package.
 
 `dbt-expectations` is an extension package for [**dbt**](https://github.com/dbt-labs/dbt), inspired by the [Great Expectations package for Python](https://greatexpectations.io/). The intent is to allow dbt users to deploy GE-like tests in their data warehouse directly from dbt, vs having to add another integration with their data warehouse.
-
-## Featured Sponsors ❤️
-
-Development of `dbt-expectations` (and `dbt-date`) is funded by our amazing [sponsors](https://github.com/sponsors/calogica), including our **featured** sponsors:
-
-<table width="80%">
-<tr>
-
-<td width="40%" valign="top" align="center">
-<p><a href="https://datacoves.com/product" target="_blank">datacoves.com</a></p>
-<p>
-<a href="https://datacoves.com/product" target="_blank">
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="https://github.com/datacoves/dbt-coves/blob/main/images/datacoves-dark.png">
-  <img alt="Datacoves" src="https://github.com/datacoves/dbt-coves/blob/main/images/datacoves-light.png" width="150">
-</picture>
-</a>
-</p>
-</td>
-
-</tr>
-
-</table>
 
 ## Install
 
 `dbt-expectations` currently supports `dbt 1.7.x` or higher.
 
-Check [dbt package hub](https://hub.getdbt.com/calogica/dbt_expectations/latest/) for the latest installation instructions, or [read the docs](https://docs.getdbt.com/docs/package-management) for more information on installing packages.
+[read the docs](https://docs.getdbt.com/docs/package-management) for more information on installing packages.
 
 Include in `packages.yml`
 
 ```yaml
 packages:
-  - package: calogica/dbt_expectations
-    version: [">=0.10.0", "<0.11.0"]
-    # <see https://github.com/calogica/dbt-expectations/releases/latest> for the latest version tag
+  - git: https://github.com/metaplane/dbt-expectations.git
+    revision: bdb8f8e668da2743036a81fa95565d5787a56532
 ```
 
 This package supports:
@@ -66,7 +42,7 @@ This package supports:
 * Spark (experimental)
 * Trino
 
-For latest release, see [https://github.com/calogica/dbt-expectations/releases](https://github.com/calogica/dbt-expectations/releases)
+For latest release, see [https://github.com/metaplane/dbt-expectations/releases](https://github.com/metaplane/dbt-expectations/releases)
 
 ### Dependencies
 
@@ -1209,7 +1185,7 @@ tests:
 - `test_end_date` is exclusive, e.g. a test with `test_end_date` value of `'2020-01-05'` will pass if your model has data through `'2021-01-04'`.
 
 - If `test_start_date` or `test_end_date` are not specified, the test automatically determines the `min`/`max` of the specified `date_col` from your data, respectively.
-On some platforms, and/or if your table is not partitione on that date column, this may lead to performance issues. In these cases, we recommend setting an explicit date literal. You may also set a "dynamic" date literal via the built-in `modules.datetime` functions:
+  On some platforms, and/or if your table is not partitione on that date column, this may lead to performance issues. In these cases, we recommend setting an explicit date literal. You may also set a "dynamic" date literal via the built-in `modules.datetime` functions:
 
 ```yaml
     date_part: day
@@ -1241,5 +1217,3 @@ To run the tests:
 
 1. You will need a profile called `integration_tests` in `~/.dbt/profiles.yml` pointing to a writable database. We only support postgres, BigQuery and Snowflake.
 2. Then, from within the `integration_tests` folder, run `dbt build` to run the test models in `integration_tests/models/schema_tests/` and run the tests specified in `integration_tests/models/schema_tests/schema.yml`
-
-<img src="https://raw.githubusercontent.com/calogica/dbt-expectations/main/expectations.gif"/>
