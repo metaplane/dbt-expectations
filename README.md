@@ -29,8 +29,8 @@ Include in `packages.yml`
 
 ```yaml
 packages:
-  - git: https://github.com/metaplane/dbt-expectations.git
-    revision: 0.10.5 # Check https://github.com/metaplane/dbt-expectations/releases for the latest release
+    - package: metaplane/dbt_expectations
+      version: 0.10.6 # Check https://github.com/metaplane/dbt-expectations/releases for the latest release
 ```
 
 This package supports:
