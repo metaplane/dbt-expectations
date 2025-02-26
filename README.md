@@ -46,7 +46,7 @@ For latest release, see [https://github.com/metaplane/dbt-expectations/releases]
 
 ### Dependencies
 
-This package includes a reference to [`dbt-date`](https://github.com/calogica/dbt-date), so there's no need to also import `dbt-date` in your local project.
+This package includes a reference to [`dbt-date`](https://github.com/godatadriven/dbt-date), so there's no need to also import `dbt-date` in your local project.
 
 ### Variables
 
