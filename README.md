@@ -30,7 +30,7 @@ Include in `packages.yml`
 ```yaml
 packages:
     - package: metaplane/dbt_expectations
-      version: 0.10.8 # Check https://github.com/metaplane/dbt-expectations/releases for the latest release
+      version: 0.10.9 # Check https://github.com/metaplane/dbt-expectations/releases for the latest release
 ```
 
 This package supports:
