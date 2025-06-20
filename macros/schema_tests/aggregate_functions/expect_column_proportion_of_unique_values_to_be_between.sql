@@ -6,7 +6,10 @@
                                                             strictly=False
                                                             ) %}
 {% set expression %}
-cast(count(distinct {{ column_name }}) as {{ dbt.type_float() }})/count({{ column_name }})
+case 
+  when count({{ column_name }}) = 0 then 1 -- Return 1 if division by zero
+  else cast(count(distinct {{ column_name }}) as {{ dbt.type_float() }})/count({{ column_name }})
+end
 {% endset %}
 {{ dbt_expectations.expression_between(model,
                                         expression=expression,
