@@ -484,7 +484,21 @@ models:
           column_list: ["col_numeric_a", "col_numeric_b"]
           sum_total: col_numeric_a_plus_b
           group_by: [idx]
-
+      - dbt_expectations.expect_multicolumn_sum_to_be_between:
+          column_list: ["col_numeric_a", "col_numeric_b"]
+          min_value: 3
+          max_value: 5
+          strictly: true
+      - dbt_expectations.expect_multicolumn_sum_to_be_between:
+          column_list: ["col_numeric_a", "col_numeric_b"]
+          min_value: 4
+          max_value: 4
+          strictly: false
+      - dbt_expectations.expect_multicolumn_sum_to_be_between:
+          column_list: ["col_numeric_a", "col_numeric_b"]
+          min_value: col_numeric_a_plus_b
+          max_value: col_numeric_a_plus_b
+          strictly: false
 
     columns:
       - name: idx
