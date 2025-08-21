@@ -137,6 +137,7 @@ For example, use `America/New_York` for East Coast Time.
 - [expect_column_pair_values_to_be_in_set](#expect_column_pair_values_to_be_in_set)
 - [expect_compound_columns_to_be_unique](#expect_compound_columns_to_be_unique)
 - [expect_multicolumn_sum_to_equal](#expect_multicolumn_sum_to_equal)
+- [expect_multicolumn_sum_to_be_between](#expect_multicolumn_sum_to_be_between)
 - [expect_select_column_values_to_be_unique_within_record](#expect_select_column_values_to_be_unique_within_record)
 
 ### Distributional functions
@@ -1099,6 +1100,23 @@ tests:
       sum_total: 4
       group_by: [group_id, other_group_id, ...] # (Optional)
       row_condition: "id is not null" # (Optional)
+```
+
+### [expect_multicolumn_sum_to_be_between](macros/schema_tests/multi-column/expect_multicolumn_sum_to_be_between.sql)
+
+Expects that sum of all rows for a set of columns is between two values.
+
+*Applies to:* Model, Seed, Source
+
+```yaml
+tests:
+  - dbt_expectations.expect_multicolumn_sum_to_be_between:
+      column_list: ["col_numeric_a", "col_numeric_b"]
+      min_value: 3
+      max_value: 5
+      group_by: [group_id, other_group_id, ...] # (Optional)
+      row_condition: "id is not null" # (Optional)
+      strictly: false # (Optional)
 ```
 
 ### [expect_compound_columns_to_be_unique](macros/schema_tests/multi-column/expect_compound_columns_to_be_unique.sql)
