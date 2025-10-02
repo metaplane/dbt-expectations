@@ -79,6 +79,21 @@ length(regexp_extract({{ source_value }}, '{{ regexp }}', 0))
     if({{ regexp_query}} = -1, 0, {{ regexp_query}})
 {% endmacro %}
 
+{% macro athena__regexp_instr(source_value, regexp, position, occurrence, is_raw, flags) %}
+{% if is_raw or flags %}
+    {{ exceptions.warn(
+            "is_raw and flags options are not supported for Athena adapter "
+            ~ "and are being ignored."
+    ) }}
+{% endif %}
+{# Athena doesn't have regexp_instr, so we simulate it using regexp_like #}
+{# Return 1 if match found (like position), 0 if not found #}
+case 
+    when regexp_like({{ source_value }}, '{{ regexp }}') then 1 
+    else 0 
+end
+{% endmacro %}
+
 {% macro _validate_flags(flags, alphabet) %}
 {% for flag in flags %}
     {% if flag not in alphabet %}
