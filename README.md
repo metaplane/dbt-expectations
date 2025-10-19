@@ -41,6 +41,7 @@ This package supports:
 * DuckDB
 * Spark (experimental)
 * Trino
+* Teradata
 
 For latest release, see [https://github.com/metaplane/dbt-expectations/releases](https://github.com/metaplane/dbt-expectations/releases)
 

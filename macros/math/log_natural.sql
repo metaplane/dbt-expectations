@@ -25,3 +25,9 @@
     ln({{ x }})
 
 {%- endmacro -%}
+
+{% macro teradata__log_natural(x) -%}
+
+    ln({{ x }})
+
+{%- endmacro -%}

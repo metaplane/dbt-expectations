@@ -37,3 +37,9 @@
     random()
 
 {%- endmacro -%}
+
+{% macro teradata__rand() -%}
+
+    random(1, 2147483647) / 2147483647.00
+
+{%- endmacro -%}

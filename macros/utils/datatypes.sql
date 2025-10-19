@@ -19,6 +19,10 @@
     timestamp(3)
 {%- endmacro %}
 
+{% macro teradata__type_timestamp() -%}
+    timestamp(6)
+{%- endmacro %}
+
 {# datetime  -------------------------------------------------     #}
 
 {% macro type_datetime() -%}
@@ -48,4 +52,8 @@
 
 {% macro trino__type_datetime() -%}
     timestamp(3)
+{%- endmacro %}
+
+{% macro teradata__type_datetime() -%}
+    timestamp(6)
 {%- endmacro %}

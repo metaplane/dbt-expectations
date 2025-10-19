@@ -1,4 +1,4 @@
-{% macro regexp_instr(source_value, regexp, position=1, occurrence=1, is_raw=False, flags="") %}
+{% macro(source_value, regexp, position=1, occurrence=1, is_raw=False, flags="") %}
 
     {{ adapter.dispatch('regexp_instr', 'dbt_expectations')(
         source_value, regexp, position, occurrence, is_raw, flags
@@ -77,6 +77,17 @@ length(regexp_extract({{ source_value }}, '{{ regexp }}', 0))
     {%- set regexp_query = "regexp_position(" ~ source_value ~ ", '" ~ regexp ~ "', " ~ position ~ ", " ~ occurrence ~ ")" -%}
     {# Trino regexp_position returns -1 if not found. Change it to 0, to be consistent with other adapters #}
     if({{ regexp_query}} = -1, 0, {{ regexp_query}})
+{% endmacro %}
+
+{% macro teradata__regexp_instr(source_value, regexp, position, occurrence, is_raw, flags) %}
+{% if flags %}{{ dbt_expectations._validate_flags(flags, 'i') }}{% endif %}
+{% if is_raw %}
+    {{ exceptions.warn(
+            "is_raw option is not supported for this adapter "
+            ~ "and is being ignored."
+    ) }}
+{% endif %}
+regexp_instr({{ source_value }}, '{{ regexp }}', {{ position }}, {{ occurrence }}, 0{% if flags %}, '{{ flags }}'{% endif %})
 {% endmacro %}
 
 {% macro _validate_flags(flags, alphabet) %}
