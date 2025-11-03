@@ -17,6 +17,6 @@
 
 {%- macro teradata__md5(string_value) -%}
 
-  hashmd5({{ string_value }})
+  HASHROW({{ string_value }})
 
 {%- endmacro -%}

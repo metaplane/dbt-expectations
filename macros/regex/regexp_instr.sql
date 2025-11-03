@@ -1,4 +1,4 @@
-{% macro(source_value, regexp, position=1, occurrence=1, is_raw=False, flags="") %}
+{% macro regexp_instr(source_value, regexp, position=1, occurrence=1, is_raw=False, flags="") %}
 
     {{ adapter.dispatch('regexp_instr', 'dbt_expectations')(
         source_value, regexp, position, occurrence, is_raw, flags
