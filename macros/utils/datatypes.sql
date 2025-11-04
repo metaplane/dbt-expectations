@@ -20,7 +20,7 @@
 {%- endmacro %}
 
 {% macro teradata__type_timestamp() -%}
-    timestamp(6)
+    timestamp
 {%- endmacro %}
 
 {# datetime  -------------------------------------------------     #}
@@ -55,5 +55,5 @@
 {%- endmacro %}
 
 {% macro teradata__type_datetime() -%}
-    timestamp(6)
+    timestamp
 {%- endmacro %}
