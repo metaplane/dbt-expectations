@@ -81,7 +81,7 @@ metric_values_with_statistics as (
     select
         metric_values.*,
         avg({{ column_name }}) over() as {{ column_name }}_average,
-        stddev({{ column_name }}) over() as {{ column_name }}_stddev
+        stddev_samp({{ column_name }}) over() as {{ column_name }}_stddev
     from
         metric_values
 
