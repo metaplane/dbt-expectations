@@ -49,6 +49,26 @@ For latest release, see [https://github.com/metaplane/dbt-expectations/releases]
 
 This package includes a reference to [`dbt-date`](https://github.com/godatadriven/dbt-date), so there's no need to also import `dbt-date` in your local project.
 
+#### For Teradata adapter:
+There is dependency on dbt-labs/dbt_utils and Teradata/teradata_utils, so user need to add the dependency in packages.yml and create search order config in dbt_project.yml as mentioned below:
+
+`packages.yml`
+```yaml
+packages:
+    - package: dbt-labs/dbt_utils
+      version: 1.3.0
+    - package: Teradata/teradata_utils
+      version: 1.3.0
+```
+
+`dbt_project.yml`
+```yaml
+  - macro_namespace: dbt_date
+    search_order: ['teradata_utils', 'dbt_utils', 'dbt_date']
+  - macro_namespace: dbt_utils
+    search_order: ['teradata_utils', 'dbt_utils']
+```
+
 ### Variables
 
 The following variables need to be defined in your `dbt_project.yml` file:
