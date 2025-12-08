@@ -14,3 +14,9 @@
   md5(cast({{ string_value }} as varbinary))
 
 {%- endmacro -%}
+
+{%- macro teradata__md5(string_value) -%}
+
+  HASHROW({{ string_value }})
+
+{%- endmacro -%}

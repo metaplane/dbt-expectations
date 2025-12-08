@@ -9,6 +9,7 @@
         select
             {{ loop.index }} as relation_column_idx,
             cast('{{ col_name }}' as {{ dbt.type_string() }}) as relation_column
+        {% if target.type == 'teradata' %}FROM SYS_CALENDAR.CALENDAR WHERE calendar_date = CURRENT_DATE{% endif %}
         {% if not loop.last %}union all{% endif %}
         {% endfor %}
     ),
@@ -18,6 +19,7 @@
         select
             {{ loop.index }} as input_column_idx,
             cast('{{ col_name }}' as {{ dbt.type_string() }}) as input_column
+        {% if target.type == 'teradata' %}FROM SYS_CALENDAR.CALENDAR WHERE calendar_date = CURRENT_DATE{% endif %}
         {% if not loop.last %}union all{% endif %}
         {% endfor %}
     )

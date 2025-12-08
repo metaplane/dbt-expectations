@@ -4,6 +4,18 @@
                                                    row_condition=None
                                                    ) %}
 
+    {{ adapter.dispatch('test_expect_column_values_to_not_be_in_set', 'dbt_expectations') (
+            model, column_name, value_set, quote_values, row_condition
+        ) }}
+
+{% endtest %}
+
+{% macro default__test_expect_column_values_to_not_be_in_set(model, column_name,
+                                                             value_set,
+                                                             quote_values,
+                                                             row_condition
+                                                             ) %}
+
 with all_values as (
 
     select
@@ -41,4 +53,50 @@ validation_errors as (
 select *
 from validation_errors
 
-{% endtest %}
+{% endmacro %}
+
+{% macro teradata__test_expect_column_values_to_not_be_in_set(model, column_name,
+                                                             value_set,
+                                                             quote_values,
+                                                             row_condition
+                                                             ) %}
+
+with all_values as (
+
+    select
+        {{ column_name }} as value_field
+
+    from {{ model }}
+    {% if row_condition %}
+    where {{ row_condition }}
+    {% endif %}
+
+),
+set_values as (
+
+    {% for value in value_set -%}
+    select
+        {% if quote_values -%}
+        cast('{{ value }}' as {{ dbt.type_string() }})
+        {%- else -%}
+        {{ value }}
+        {%- endif %} as value_field
+    from SYS_CALENDAR.CALENDAR where day_of_calendar = 1
+    {% if not loop.last %}union all{% endif %}
+    {% endfor %}
+),
+validation_errors as (
+    -- values from the model that match the set
+    select
+        v.value_field
+    from
+        all_values v
+        join
+        set_values s on v.value_field = s.value_field
+
+)
+
+select *
+from validation_errors
+
+{% endmacro %}

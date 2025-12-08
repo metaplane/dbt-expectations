@@ -79,6 +79,17 @@ length(regexp_extract({{ source_value }}, '{{ regexp }}', 0))
     if({{ regexp_query}} = -1, 0, {{ regexp_query}})
 {% endmacro %}
 
+{% macro teradata__regexp_instr(source_value, regexp, position, occurrence, is_raw, flags) %}
+{% if flags %}{{ dbt_expectations._validate_flags(flags, 'i') }}{% endif %}
+{% if is_raw %}
+    {{ exceptions.warn(
+            "is_raw option is not supported for this adapter "
+            ~ "and is being ignored."
+    ) }}
+{% endif %}
+regexp_instr({{ source_value }}, '{{ regexp }}', {{ position }}, {{ occurrence }}, 0{% if flags %}, '{{ flags }}'{% endif %})
+{% endmacro %}
+
 {% macro _validate_flags(flags, alphabet) %}
 {% for flag in flags %}
     {% if flag not in alphabet %}

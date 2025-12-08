@@ -376,6 +376,8 @@ models:
               sigma_threshold: 6
               take_logs: false
               severity: warn
+              config:
+                enabled: "{{ target.type != 'teradata' }}"
 
 
   - name: data_test

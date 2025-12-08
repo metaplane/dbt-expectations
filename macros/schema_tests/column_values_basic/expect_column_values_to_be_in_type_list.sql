@@ -10,6 +10,7 @@
         select
             cast('{{ escape_single_quotes(column.name | upper) }}' as {{ dbt.type_string() }}) as relation_column,
             cast('{{ column.dtype | upper }}' as {{ dbt.type_string() }}) as relation_column_type
+        {% if target.type == 'teradata' %}FROM SYS_CALENDAR.CALENDAR WHERE calendar_date = CURRENT_DATE{% endif %}           
         {% if not loop.last %}union all{% endif %}
         {% endfor %}
     ),

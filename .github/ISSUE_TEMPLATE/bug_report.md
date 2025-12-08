@@ -36,5 +36,9 @@ Note: dbt-expectations currently does not support database adapters other than t
 - Postgres
 - Snowflake
 - BigQuery
+- DuckDB
+- Spark (experimental)
+- Trino
+- Teradata
 
 ### Additional Context
