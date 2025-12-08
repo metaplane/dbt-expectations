@@ -9,7 +9,7 @@ add_row_values as (
     select
         {% if target.type == 'teradata' %}
         
-        cast(dates.date_day as date) as date_day,
+        cast(cast(dates.date_day as date) as {{ dbt_expectations.type_datetime() }}) as date_day,
         cast(row_values.generated_number as {{ dbt.type_float() }}) as row_value
         {% else %}
        
