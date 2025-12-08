@@ -6,6 +6,26 @@
                                                             exclusion_condition=None,
                                                             test_start_date=None,
                                                             test_end_date=None) -%}
+
+{{ adapter.dispatch('test_expect_row_values_to_have_data_for_every_n_datepart', 'dbt_expectations')(model,
+                                                            date_col,
+                                                            date_part,
+                                                            interval,
+                                                            row_condition,
+                                                            exclusion_condition,
+                                                            test_start_date,
+                                                            test_end_date) }}
+
+{%- endtest -%}
+
+{% macro default__test_expect_row_values_to_have_data_for_every_n_datepart(model,
+                                                            date_col,
+                                                            date_part="day",
+                                                            interval=None,
+                                                            row_condition=None,
+                                                            exclusion_condition=None,
+                                                            test_start_date=None,
+                                                            test_end_date=None) -%}
 {% if not execute %}
     {{ return('') }}
 {% endif %}
@@ -127,4 +147,142 @@ where row_cnt = 0
 {% if exclusion_condition %}
   and {{ exclusion_condition }}
 {% endif %}
-{%- endtest -%}
+{%- endmacro -%}
+
+{%- macro teradata__test_expect_row_values_to_have_data_for_every_n_datepart(model,
+                                                            date_col,
+                                                            date_part="day",
+                                                            interval=None,
+                                                            row_condition=None,
+                                                            exclusion_condition=None,
+                                                            test_start_date=None,
+                                                            test_end_date=None) -%}
+{% if not execute %}
+    {{ return('') }}
+{% endif %}
+
+{% if not test_start_date or not test_end_date %}
+    {% set sql %}
+
+        select
+            {% if date_part == 'day' %}
+            min(cast({{ date_col }} as date)) as start_{{ date_part }},
+            max(cast({{ date_col }} as date)) as end_{{ date_part }}
+            {% else %}
+            min(cast({{ date_col }} as {{ dbt.type_timestamp() }})) as start_{{ date_part }},
+            max(cast({{ date_col }} as {{ dbt.type_timestamp() }})) as end_{{ date_part }}
+            {% endif %}
+        from {{ model }}
+        {% if row_condition %}
+        where {{ row_condition }}
+        {% endif %}
+
+    {% endset %}
+
+    {%- set dr = run_query(sql) -%}
+
+    {%- set db_start_date = dr.columns[0].values()[0] -%}
+    {%- set db_end_date = dr.columns[1].values()[0] -%}
+
+    {% if db_start_date is not string %}
+        {% if date_part == 'day' %}
+        {%- set db_start_date = db_start_date.strftime('%Y-%m-%d') -%}
+        {%- set db_end_date = db_end_date.strftime('%Y-%m-%d') -%}
+        {% else %}
+        {%- set db_start_date = db_start_date.strftime('%Y-%m-%d %H:%M:%S') -%}
+        {%- set db_end_date = db_end_date.strftime('%Y-%m-%d %H:%M:%S') -%}
+        {% endif %}
+    {% endif %}
+
+{% endif %}
+
+{% if not test_start_date %}
+{% set start_date = db_start_date %}
+{% else %}
+{% set start_date = test_start_date %}
+{% endif %}
+
+
+{% if not test_end_date %}
+{% set end_date = db_end_date %}
+{% else %}
+{% set end_date = test_end_date %}
+{% endif %}
+
+{# Teradata: Flatten nested CTEs by inlining get_base_dates logic #}
+{%- if date_part == 'day' -%}
+    {%- set start_date_cast = "cast(cast('" ~ start_date ~ "' as date) as " ~ dbt.type_timestamp() ~ ")" -%}
+    {%- set end_date_cast = "cast(cast('" ~ end_date ~ "' as date) as " ~ dbt.type_timestamp() ~ ")" -%}
+{%- else -%}
+    {%- set start_date_cast = "cast('" ~ start_date ~ "' as " ~ dbt.type_timestamp() ~ ")" -%}
+    {%- set end_date_cast = "cast('" ~ end_date ~ "' as " ~ dbt.type_timestamp() ~ ")" -%}
+{%- endif -%}
+
+{% set intervals = dbt_utils.get_intervals_between(start_date_cast, end_date_cast, date_part) %}
+
+with model_data as (
+
+    select
+    {% if not interval %}
+
+        cast(cast({{ date_col }} as date) as {{ dbt_expectations.type_datetime() }}) as date_{{ date_part }},
+
+    {% else %}
+        {# For interval case, calculate the bucketed date by subtracting the mod offset #}
+        cast(
+            cast({{ date_col }} as date) - 
+            mod(
+                cast(cast({{ date_col }} as date) - cast('{{ start_date }}' as date) as {{ dbt.type_int() }}),
+                cast({{ interval }} as {{ dbt.type_int() }})
+            )
+        as {{ dbt_expectations.type_datetime() }}) as date_{{ date_part }},
+
+    {% endif %}
+
+        count(*) as row_cnt
+    from
+        {{ model }} f
+    {% if row_condition %}
+    where {{ row_condition }}
+    {% endif %}
+    group by
+        date_{{date_part}}
+
+),
+
+base_dates_raw as (
+    SELECT {{ dbt.dateadd(date_part, 'row_number() over (order by generated_number) - 1', start_date_cast) }} as date_val
+    FROM ({{ dbt_utils.generate_series(intervals) }}) as gs
+),
+
+base_dates as (
+    select cast(cast(date_val as date) as {{ dbt.type_timestamp() }}) as date_{{ date_part }}
+    from base_dates_raw
+    where cast(date_val as date) <= cast({{ end_date_cast }} as date)
+    {% if interval %}
+    and mod(
+            cast(cast(date_val as date) - cast('{{ start_date }}' as date) as {{ dbt.type_int() }}),
+            cast({{interval}} as {{ dbt.type_int() }})
+        ) = 0
+    {% endif %}
+),
+
+final as (
+
+    select
+        cast(d.date_{{ date_part }} as {{ dbt_expectations.type_datetime() }}) as date_{{ date_part }},
+        case when f.date_{{ date_part }} is null then 1 else 0 end as is_missing,
+        coalesce(f.row_cnt, 0) as row_cnt
+    from
+        base_dates d
+        left join
+        model_data f on cast(d.date_{{ date_part }} as {{ dbt_expectations.type_datetime() }}) = f.date_{{ date_part }}
+)
+select
+    *
+from final
+where row_cnt = 0
+{% if exclusion_condition %}
+  and {{ exclusion_condition }}
+{% endif %}
+{%- endmacro -%}
