@@ -656,12 +656,12 @@ models:
               sigma_threshold: 6
           - dbt_expectations.expect_column_values_to_be_within_n_stdevs:
               sigma_threshold: 6
-          # - dbt_expectations.expect_column_values_to_be_within_n_stdevs:
-          #     group_by: [group_id]
-          #     sigma_threshold: 1
-          #     config:
-          #         # this should fail, so we flip the fail condition
-          #         fail_calc: 'cast((count(*)=0) as int)'
+          - dbt_expectations.expect_column_values_to_be_within_n_stdevs:
+              group_by: [group_id]
+              sigma_threshold: 1
+              config:
+                  # this should fail, so we flip the fail condition
+                  fail_calc: 'cast((count(*)=0) as int)'
 
 
   - name: window_function_test
