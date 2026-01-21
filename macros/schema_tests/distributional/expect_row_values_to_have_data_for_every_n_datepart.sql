@@ -105,7 +105,7 @@ model_data as (
     where {{ row_condition }}
     {% endif %}
     group by
-        date_{{date_part}}
+        1
 
 ),
 
