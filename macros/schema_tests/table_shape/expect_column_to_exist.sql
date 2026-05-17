@@ -10,11 +10,11 @@
 
         {%- set column_index_0 = column_index - 1 if column_index > 0 else 0 -%}
 
-        {%- set column_index_matches = true if matching_column_index == column_index_0 else false %}
+        {%- set column_index_matches = 1 if matching_column_index == column_index_0 else 0 %}
 
     {%- else -%}
 
-        {%- set column_index_matches = true -%}
+        {%- set column_index_matches = 1 -%}
 
     {%- endif %}
 
@@ -29,7 +29,7 @@
     select *
     from test_data
     where
-        not(matching_column_index >= 0 and column_index_matches)
+        not(matching_column_index >= 0 and column_index_matches = 1)
 
 {%- endif -%}
 {%- endtest -%}
