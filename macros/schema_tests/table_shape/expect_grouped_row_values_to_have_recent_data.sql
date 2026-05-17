@@ -23,7 +23,10 @@
 with latest_grouped_timestamps as (
 
     select
-        {{ group_by | join(",") ~ "," if group_by }}
+        {% if group_by %}
+        {% for g in group_by %}{{ g }} as dbt_expectations_group_by_{{ loop.index }},
+        {% endfor %}
+        {% endif %}
         max(1) as join_key,
         max(cast({{ timestamp_column }} as {{ dbt_expectations.type_timestamp() }})) as latest_timestamp_column
     from
@@ -42,7 +45,10 @@ with latest_grouped_timestamps as (
 total_row_counts as (
 
     select
-        {{ group_by | join(",") ~ "," if group_by }}
+        {% if group_by %}
+        {% for _ in group_by %}dbt_expectations_group_by_{{ loop.index }},
+        {% endfor %}
+        {% endif %}
         max(1) as join_key,
         count(*) as row_count
     from
@@ -78,7 +84,7 @@ validation_errors as (
         outdated_grouped_timestamps t
         on
             {% for g in group_by %}
-            r.{{ g }} = t.{{ g }} and
+            r.dbt_expectations_group_by_{{ loop.index }} = t.dbt_expectations_group_by_{{ loop.index }} and
             {% endfor %}
             r.join_key = t.join_key
     where
