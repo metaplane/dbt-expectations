@@ -16,7 +16,7 @@ with test_data as (
         count(distinct_values) as set_count_case_insensitive
     from
         test_data
-    group by 1
+    group by lower(distinct_values)
     having
         count(distinct_values) > 1
 
