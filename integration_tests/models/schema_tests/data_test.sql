@@ -55,3 +55,18 @@ select
     1.0 as col_numeric_a_plus_b,
     8 as idx_multiplied_by_2,
     -8 as idx_multiplied_by_minus_2
+
+union all
+
+select
+    5 as idx,
+    '2020-10-23' as date_col,
+    0.5 as col_numeric_a,
+    0.5 as col_numeric_b,
+    NULL as col_string_a,
+    'abcde' as col_string_b,
+    null as col_null,
+    null as col_null_2,
+    1 as col_numeric_a_plus_b,
+    10 as idx_multiplied_by_2,
+    -10 as idx_multiplied_by_minus_2

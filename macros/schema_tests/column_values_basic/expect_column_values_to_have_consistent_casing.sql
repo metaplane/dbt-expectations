@@ -26,7 +26,7 @@ with test_data as (
  validation_errors as (
 
     select
-        count(1) as set_count,
+        count(distinct_values) as set_count,
         count(distinct lower(distinct_values)) as set_count_case_insensitive
     from
         test_data

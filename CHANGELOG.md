@@ -1,3 +1,7 @@
+# Unreleased
+## Fixes
+* Fix `expect_column_values_to_have_consistent_casing` to correctly handle `NULL` values in columns.
+
 # dbt-expectations v0.10.5
 ## Fixes
 * Update CI for dbt 1.9.x https://github.com/metaplane/dbt-expectations/pull/2

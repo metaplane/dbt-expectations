@@ -404,14 +404,14 @@ models:
           column_list: ["col_null", "col_null_2"]
           ignore_row_if: "all_values_are_missing"
       - dbt_expectations.expect_table_row_count_to_equal:
-          value: 4
+          value: 5
       - dbt_expectations.expect_table_row_count_to_be_between:
           min_value: 1
-          max_value: 4
+          max_value: 5
       - dbt_expectations.expect_table_row_count_to_be_between:
           min_value: 1
       - dbt_expectations.expect_table_row_count_to_be_between:
-          max_value: 4
+          max_value: 5
       - dbt_expectations.expect_table_row_count_to_equal_other_table:
           compare_model: ref("data_test")
           row_condition: 1=1
@@ -476,7 +476,7 @@ models:
           ignore_row_if: "any_value_is_missing"
       - dbt_expectations.expect_multicolumn_sum_to_equal:
           column_list: ["col_numeric_a", "col_numeric_b"]
-          sum_total: 4
+          sum_total: 5
       - dbt_expectations.expect_multicolumn_sum_to_equal:
           column_list: ["col_numeric_a", "col_numeric_b"]
           sum_total: col_numeric_a_plus_b
@@ -543,15 +543,18 @@ models:
         tests:
           - dbt_expectations.expect_column_values_to_be_in_set:
               value_set: ['a', 'b', 'c']
+              row_condition: 'col_string_a is not NULL'
               quote_values: true
           - dbt_expectations.expect_column_values_to_not_be_in_set:
               value_set: ['2','3']
               quote_values: true
           - dbt_expectations.expect_column_distinct_values_to_equal_set:
               value_set: ['a','b','c','c']
+              row_condition: 'col_string_a is not NULL'
           - dbt_expectations.expect_column_distinct_values_to_be_in_set:
               value_set: ['a','b','c','d']
               quote_values: true
+              row_condition: 'col_string_a is not NULL'
           - dbt_expectations.expect_column_distinct_values_to_contain_set:
               value_set: ['a','b']
           - dbt_expectations.expect_column_value_lengths_to_equal:
@@ -560,7 +563,7 @@ models:
           - dbt_expectations.expect_column_values_to_have_consistent_casing:
               display_inconsistent_columns: true
           - dbt_expectations.expect_column_distinct_count_to_be_less_than:
-              value: 4
+              value: 5
 
       - name: col_string_b
         tests:
@@ -569,11 +572,11 @@ models:
               quote_values: true
           - dbt_expectations.expect_column_value_lengths_to_be_between:
               min_value: 1
-              max_value: 4
+              max_value: 5
           - dbt_expectations.expect_column_value_lengths_to_be_between:
               min_value: 1
           - dbt_expectations.expect_column_value_lengths_to_be_between:
-              max_value: 4
+              max_value: 5
 
       - name: col_null
         tests:
