@@ -2,7 +2,7 @@
   {{ adapter.dispatch('quantile', 'dbt_expectations') (field, quantile, partition) }}
 {% endmacro %}
 
-{% macro default__quantile(field, quantile, partition)  -%}
+{% macro default__quantile(field, quantile, partition) -%}
     percentile_cont({{ quantile }}) within group (order by {{ field }})
     {%- if partition %}over(partition by {{ partition }}){% endif -%}
 {%- endmacro %}

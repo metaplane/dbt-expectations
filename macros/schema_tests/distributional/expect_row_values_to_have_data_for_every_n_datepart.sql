@@ -65,7 +65,7 @@ with base_dates as (
     #}
     where mod(
             cast({{ dbt.datediff("'" ~ start_date ~ "'", 'date_' ~ date_part, date_part) }} as {{ dbt.type_int() }}),
-            cast({{interval}} as {{ dbt.type_int() }})
+            cast({{ interval }} as {{ dbt.type_int() }})
         ) = 0
     {% endif %}
 
@@ -94,7 +94,7 @@ model_data as (
                 cast(" ~ interval ~ " as  " ~ dbt.type_int() ~ " )
             ) * (-1)",
             "cast( " ~ dbt.date_trunc(date_part, date_col) ~ " as  " ~ dbt_expectations.type_datetime() ~ ")"
-        )}} as date_{{ date_part }},
+        ) }} as date_{{ date_part }},
 
     {% endif %}
 
@@ -105,7 +105,7 @@ model_data as (
     where {{ row_condition }}
     {% endif %}
     group by
-        date_{{date_part}}
+        date_{{ date_part }}
 
 ),
 
