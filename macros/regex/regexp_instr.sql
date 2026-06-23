@@ -76,7 +76,7 @@ length(regexp_extract({{ source_value }}, '{{ regexp }}', 0))
     {% endif %}
     {%- set regexp_query = "regexp_position(" ~ source_value ~ ", '" ~ regexp ~ "', " ~ position ~ ", " ~ occurrence ~ ")" -%}
     {# Trino regexp_position returns -1 if not found. Change it to 0, to be consistent with other adapters #}
-    if({{ regexp_query}} = -1, 0, {{ regexp_query}})
+    if({{ regexp_query }} = -1, 0, {{ regexp_query }})
 {% endmacro %}
 
 {% macro _validate_flags(flags, alphabet) %}
@@ -97,9 +97,9 @@ length(regexp_extract({{ source_value }}, '{{ regexp }}', 0))
 {# m  :  multi-line mode: ^ and $ match begin/end line in addition to begin/end text (default false) #}
 {# s  :  let . match \n (default false) #}
 {# U  :  ungreedy: swap meaning of x* and x*?, x+ and x+?, etc (default false) #}
-{# Flag syntax is xyz (set) or -xyz (clear) or xy-z (set xy, clear z).  #}
+{# Flag syntax is xyz (set) or -xyz (clear) or xy-z (set xy, clear z). #}
 
-{# Regex explanation: do not allow consecutive dashes, accept all re2 flags and clear operator, do not end with a dash  #}
+{# Regex explanation: do not allow consecutive dashes, accept all re2 flags and clear operator, do not end with a dash #}
 {% set re2_flags_pattern = '^(?!.*--)[-imsU]*(?<!-)$' %}
 {% set re = modules.re %}
 {% set is_match = re.match(re2_flags_pattern, flags) %}

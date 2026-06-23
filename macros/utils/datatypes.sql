@@ -1,4 +1,4 @@
-{# timestamp  -------------------------------------------------     #}
+{# timestamp  ------------------------------------------------- #}
 {%- macro type_timestamp() -%}
   {{ return(adapter.dispatch('type_timestamp', 'dbt_expectations')()) }}
 {%- endmacro -%}
@@ -19,7 +19,7 @@
     timestamp(3)
 {%- endmacro %}
 
-{# datetime  -------------------------------------------------     #}
+{# datetime  ------------------------------------------------- #}
 
 {% macro type_datetime() -%}
   {{ return(adapter.dispatch('type_datetime', 'dbt_expectations')()) }}

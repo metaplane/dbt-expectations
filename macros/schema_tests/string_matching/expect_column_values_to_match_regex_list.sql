@@ -10,7 +10,7 @@
     {% for regex in regex_list %}
     {{ dbt_expectations.regexp_instr(column_name, regex, is_raw=is_raw, flags=flags) }} > 0
     {%- if not loop.last %}
-    {{ " and " if match_on == "all" else " or "}}
+    {{ " and " if match_on == "all" else " or " }}
     {% endif -%}
     {% endfor %}
 {% endset %}

@@ -31,7 +31,7 @@ add_lag_values as (
                 (order by sort_column)
             {%- else -%}
                 (partition by {{ group_by | join(", ") }} order by sort_column)
-            {%- endif  %} as value_field_lag
+            {%- endif %} as value_field_lag
     from
         all_values
 

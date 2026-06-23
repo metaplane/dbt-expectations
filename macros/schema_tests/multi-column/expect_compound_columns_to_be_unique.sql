@@ -25,7 +25,7 @@
 
 {%- set row_condition_ext -%}
 
-    {%- if row_condition  %}
+    {%- if row_condition %}
     {{ row_condition }} and
     {% endif -%}
 
@@ -39,7 +39,7 @@ with validation_errors as (
         {% for column in columns -%}
         {{ column }},
         {%- endfor %}
-        count(*) as {{adapter.quote("n_records")}}
+        count(*) as {{ adapter.quote("n_records") }}
     from {{ model }}
     where
         1=1
