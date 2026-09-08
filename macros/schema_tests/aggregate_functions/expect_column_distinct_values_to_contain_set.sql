@@ -24,6 +24,9 @@ set_values as (
         {%- else -%}
         {{ value }}
         {%- endif %} as value_field
+        {% if target.type == 'oracle' -%}
+           from dual
+        {%- endif %}
     {% if not loop.last %}union all{% endif %}
     {% endfor %}
 
