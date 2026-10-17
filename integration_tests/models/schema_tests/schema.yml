@@ -403,6 +403,18 @@ models:
       - dbt_expectations.expect_compound_columns_to_be_unique:
           column_list: ["col_null", "col_null_2"]
           ignore_row_if: "all_values_are_missing"
+      - dbt_expectations.expect_column_values_to_be_of_type:
+          column_name: col_does_not_exist
+          column_type: "{{ dbt.type_string() }}"
+          config:
+            # this should fail, so we flip the fail condition
+            fail_calc: 'cast((count(*)=0) as int)'
+      - dbt_expectations.expect_column_values_to_be_in_type_list:
+          column_name: col_does_not_exist
+          column_type_list: ["{{ dbt.type_string() }}"]
+          config:
+            # this should fail, so we flip the fail condition
+            fail_calc: 'cast((count(*)=0) as int)'
       - dbt_expectations.expect_table_row_count_to_equal:
           value: 4
       - dbt_expectations.expect_table_row_count_to_be_between:
