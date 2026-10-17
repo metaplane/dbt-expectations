@@ -561,6 +561,11 @@ models:
               display_inconsistent_columns: true
           - dbt_expectations.expect_column_distinct_count_to_be_less_than:
               value: 4
+          - dbt_expectations.expect_column_proportion_of_non_null_values_to_be_between:
+              min_value: 1
+          - dbt_expectations.expect_column_proportion_of_non_null_values_to_be_between:
+              min_value: 1
+              group_by: [date_col]
 
       - name: col_string_b
         tests:
@@ -578,6 +583,13 @@ models:
       - name: col_null
         tests:
           - dbt_expectations.expect_column_values_to_be_null
+          - dbt_expectations.expect_column_proportion_of_non_null_values_to_be_between:
+              max_value: 0
+          - dbt_expectations.expect_column_proportion_of_non_null_values_to_be_between:
+              min_value: .5
+              config:
+                # this should fail, so we flip the fail condition
+                fail_calc: 'cast((count(*)=0) as int)'
 
       - name: idx_multiplied_by_2
         tests:

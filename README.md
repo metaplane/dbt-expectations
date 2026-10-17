@@ -124,6 +124,7 @@ For example, use `America/New_York` for East Coast Time.
 - [expect_column_median_to_be_between](#expect_column_median_to_be_between)
 - [expect_column_min_to_be_between](#expect_column_min_to_be_between)
 - [expect_column_most_common_value_to_be_in_set](#expect_column_most_common_value_to_be_in_set)
+- [expect_column_proportion_of_non_null_values_to_be_between](#expect_column_proportion_of_non_null_values_to_be_between)
 - [expect_column_proportion_of_unique_values_to_be_between](#expect_column_proportion_of_unique_values_to_be_between)
 - [expect_column_quantile_values_to_be_between](#expect_column_quantile_values_to_be_between)
 - [expect_column_stdev_to_be_between](#expect_column_stdev_to_be_between)
@@ -933,6 +934,24 @@ tests:
   - dbt_expectations.expect_column_unique_value_count_to_be_between:
       min_value: 3 # (Optional)
       max_value: 3 # (Optional)
+      group_by: [group_id, other_group_id, ...] # (Optional)
+      row_condition: "id is not null" # (Optional)
+      strictly: false # (Optional. Default is 'false'. Adds an 'or equal to' to the comparison operator for min/max)
+```
+
+### [expect_column_proportion_of_non_null_values_to_be_between](macros/schema_tests/aggregate_functions/expect_column_proportion_of_non_null_values_to_be_between.sql)
+
+Expect the proportion of non-null values to be between a min_value value and a max_value value.
+
+For example, in a column containing [1, 2, null, 4], there are 3 non-null values and 4 total rows for a proportion of 0.75.
+
+*Applies to:* Column
+
+```yaml
+tests:
+  - dbt_expectations.expect_column_proportion_of_non_null_values_to_be_between:
+      min_value: .9 # (Optional)
+      max_value: 1 # (Optional)
       group_by: [group_id, other_group_id, ...] # (Optional)
       row_condition: "id is not null" # (Optional)
       strictly: false # (Optional. Default is 'false'. Adds an 'or equal to' to the comparison operator for min/max)
